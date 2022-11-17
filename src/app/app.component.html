@@ -1,0 +1,132 @@
+
+<style>
+  :host {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 14px;
+    color: #333;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+
+  .toolbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    background-color: #1976d2;
+    color: white;
+    font-weight: 600;
+  }
+  .content {
+    display: flex;
+    margin: 82px auto 32px;
+    padding: 0 16px;
+    max-width: 100%;
+    flex-direction: column;    
+  }
+  
+</style>
+
+<!-- Toolbar -->
+<div class="toolbar" role="banner" style="padding-left: 600px;">
+  <span>I CAN HAZ DAD JOKE </span>
+</div>
+
+<div class="content" role="main">
+  <section>
+    <div class="container"> 
+      <div class="row">
+        <div class="col-md-12"> 
+          <table class="table">
+              <tr>
+                <td class="col-2" style="text-align: left;padding-top: 31px;">
+                  <button class="btn btn-outline-success" (click)="getRandomJoke()">Random Joke</button>
+                </td>
+                <td>
+                  <textarea class="form-control form-control-sm" id="exampleFormControlTextarea1" [ngModel]="randomJokeModel.joke" readonly rows="3"></textarea>                  
+                </td>
+              </tr>              
+          </table>     
+        </div>  
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">      
+        <div class="col-md-12">  
+          <table class="table">
+          <tr>            
+            <td class="col-6"></td>
+            <td class="col-4">
+              <input class="form-control me-2" type="search" [(ngModel)]="searchWord" placeholder="Search" aria-label="Search"/>
+            </td>
+            <td colspan="2" style="text-align: right;">             
+              <button class="btn btn-outline-success" (click)="searchJokes()">Search Joke</button>
+            </td>
+          </tr>   
+          </table>     
+          <table *ngIf="!isDataNotFound">
+            <tr style="text-align: right;">
+              <td class="col-6"></td>
+              <td class="col-2"></td>
+              <td class="col-2">               
+                <button style="background-color: red;font-weight:bold;color: wheat;">Short Joke</button>
+              </td>
+              <td class="col-2">
+                <button style="background-color: blue;font-weight:bold;color: wheat;width: 110px;">Medium Joke</button>
+              </td>
+              <td class="col-2">            
+                <button style="background-color: green;font-weight:bold;color: wheat;;width: 110px">Long Joke</button>
+              </td>
+            </tr>
+          </table>
+          <table class="table table-striped" *ngIf="!isDataNotFound">            
+            <thead>
+              <tr>               
+                <th scope="col">Id</th>
+                <th scope="col">Joke</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of searchJokesModel.result; index as i">
+                <th scope="row">{{ i + 1 }}</th>
+                <td *ngIf="data.numberOfWords<=10">  
+                 <span style="color: red"> {{ data.joke }}</span>
+                </td>
+                <td *ngIf="data.numberOfWords >10 && data.numberOfWords < 20">  
+                  <span style="color:blue"> {{ data.joke }}</span>
+                </td>
+                <td *ngIf="data.numberOfWords>=20">  
+                  <span style="color:green"> {{ data.joke }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="container" *ngIf="isDataNotFound && showError">
+      <div class="row">
+        <div class="col-md-12"> 
+          <table class="col-12">
+              <td style="text-align: center;">
+                <span style="font-weight: bold;font-size: medium;">Data not found</span>
+              </td>
+          </table>
+          
+        </div>
+      </div>      
+    </div>
+  </section>
+</div>
+
+<router-outlet></router-outlet>
