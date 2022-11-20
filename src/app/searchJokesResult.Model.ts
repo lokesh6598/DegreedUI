@@ -7,6 +7,5 @@ export class SearchJokesModel extends RandomJokeModel{
     previousPage:number;
     result:RandomJokeModel[];
     searchTerm:string;
-    totalJokes:number;
-    numberOfWords:number;
+    totalJokes:number;   
 }

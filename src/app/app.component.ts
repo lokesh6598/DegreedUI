@@ -14,6 +14,7 @@ export class AppComponent {
   title = 'degreedUI';
   randomJokeModel : RandomJokeModel;
   searchJokesModel : SearchJokesModel;  
+  backupSearchJokesModel : SearchJokesModel;  
   searchWord:string;
   limit:number;
   page:number;
@@ -35,23 +36,34 @@ export class AppComponent {
       }      
     });
   }
-  public searchJokes(){
-    var param = null;
-    if(this.searchWord == undefined){
-      this.searchWord = "";
-    }
-    let params = {"searchTerm":this.searchWord,"limit":this.limit,"page":this.page}
-  this.appService.searchJokes(params).subscribe((res)=>{
-    let result = res;
-    if(res.statusCode == 200){
-      this.searchJokesModel = res.result
-      this.isDataNotFound = false;           
-    }
-    else{
-      this.showError = true;
-      this.isDataNotFound = true;   
-    }
-  });
+  public searchJokes()
+  {
+      var param = null;
+      if(this.searchWord == undefined){
+        this.searchWord = "";
+      }
+      let params = {"searchTerm":this.searchWord,"limit":this.limit,"page":this.page}
+      this.appService.searchJokes(params).subscribe((res)=>{
+      let result = res;
+      if(res.statusCode == 200){
+        this.searchJokesModel = res.result
+        this.backupSearchJokesModel = Object.assign({}, res.result);
+        this.isDataNotFound = false;           
+      }
+      else{
+        this.showError = true;
+        this.isDataNotFound = true;   
+      }
+    });
   }
+  public ShortJokes(){
+    this.searchJokesModel.result = this.backupSearchJokesModel.result.filter(x=>x.numberOfWords <=10);
+  }
+  public MediumJokes(){
+    this.searchJokesModel.result = this.backupSearchJokesModel.result.filter(x=>x.numberOfWords >10 && x.numberOfWords <20);   
+  }
+  public LargeJokes(){
+    this.searchJokesModel.result = this.backupSearchJokesModel.result.filter(x=>x.numberOfWords >=20);
+  } 
 }
 
